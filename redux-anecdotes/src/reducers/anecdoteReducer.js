@@ -19,11 +19,52 @@ const asObject = (anecdote) => {
 
 const initialState = anecdotesAtStart.map(asObject)
 
+const getMatch = (obj, id) => obj.find(element => element.id === id)
+
 const reducer = (state = initialState, action) => {
+
+  // Leave in for debugging 
   console.log('state now: ', state)
   console.log('action', action)
 
-  return state
+  switch (action.type) {
+    case 'ADD_VOTE':
+      const id = action.data.id
+      const toChange = state.find(element => element.id === id)
+
+      const modified = {
+        ...toChange,
+        votes: toChange.votes + 1
+      }
+
+      return state.map(element => element.id === id ? modified : element)
+    case 'CREATE_ANECDOTE':
+      let newId = getId()
+
+      // Ensure newly generated id hasn't already been used before
+      while (getMatch(state, newId) !== undefined) {
+        newId = getId() 
+      }
+      
+      return state.concat({ content: action.data, id: newId, votes: 0 })
+    default:
+      return state      
+
+  }
+}
+
+export const createAnecdote = content => {
+  return {
+    type: 'CREATE_ANECDOTE',
+    data: content
+  }
+}
+
+export const addVote = id => {
+  return {
+    type: 'ADD_VOTE',
+    data: { id }
+  }
 }
 
 export default reducer
