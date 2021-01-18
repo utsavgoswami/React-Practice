@@ -21,7 +21,7 @@ const initialState = anecdotesAtStart.map(asObject)
 
 const getMatch = (obj, id) => obj.find(element => element.id === id)
 
-const reducer = (state = initialState, action) => {
+const anecdoteReducer = (state = initialState, action) => {
 
   // Leave in for debugging 
   console.log('state now: ', state)
@@ -67,4 +67,4 @@ export const addVote = id => {
   }
 }
 
-export default reducer
+export default anecdoteReducer
